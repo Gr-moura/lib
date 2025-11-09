@@ -1,51 +1,46 @@
-/* clang-format off */
 #include <bits/stdc++.h>
-#include <iostream>
 using namespace std;
 
-#define dbg(x) cout << #x << " = " << x << endl
-#define printv(a) {for(auto u:a) cout<<u<<" "; cout<<endl;}
-#define all(x) x.begin(), x.end()
-#define sz(a) ((int)((a).size()))
-#define int long long
-#define endl '\n'
-#define f first
-#define s second
-#define pb push_back
-#define lb(vect, x) (lower_bound(all(vect), x) - vect.begin())
-#define ub(vect, x) (upper_bound(all(vect), x) - vect.begin())
+// SegTree de soma
+// Query e Update em O(log(n))
+// Build em O(n)
 
-typedef unsigned long long ull;
-typedef long long ll;
-typedef pair<int, int> pii;
-typedef vector<int> vi;
+const int MAX = 1e5 + 10;
 
-bool prime(ll a) { if (a == 1) return 0; for (int i = 2; i*i <= a; i++) if (a % i == 0) return 0; return 1; }
-
-const int MOD = 1e9 + 7, MAX = 1e5 + 10;
-const int INF = 0x3f3f3f3f;
-const ll LINF = 0x3f3f3f3f3f3f3f3fll;
-/* clang-format on */
 int a[MAX];
 int seg[4 * MAX];
 
+// p: posição do nó atual na segtree
+// l, r: intervalo representado por este nó no vetor original
+
+// build(1, 0, n - 1); -> Começamos na raiz, que representa o intervalo [0, n - 1]
 int build(int p, int l, int r)
 {
+    // Caso base: folha, achamos o valor diretamente do vetor original
     if (l == r) return seg[p] = a[l];
 
+    // Dividimos o intervalo em dois e construímos os filhos
     int mid = l + (r - l) / 2;
     return seg[p] = build(2 * p, l, mid) + build(2 * p + 1, mid + 1, r);
 }
 
+// Query na range [a, b] do vetor original (0-indexed)
+// query(a, b, 1, 0, n - 1); -> Começamos na raiz, que representa o intervalo [0, n - 1]
 int query(int a, int b, int p, int l, int r)
 {
+    // Caso base: intervalo totalmente fora da query
     if (b < l or a > r) return 0;
+
+    // Caso base: intervalo totalmente dentro da query
     if (l >= a and r <= b) return seg[p];
 
+    // Dividimos o intervalo em dois e consultamos os filhos
     int mid = l + (r - l) / 2;
     return query(a, b, 2 * p, l, mid) + query(a, b, 2 * p + 1, mid + 1, r);
 }
 
+// Update na posição i do vetor original para o valor v
+// update(i, v, 1, 0, n - 1); -> Começamos na raiz, que representa o intervalo [0, n - 1]
 int update(int i, int v, int p, int l, int r)
 {
     if (l == r and l == i) return seg[p] = v;
@@ -82,30 +77,4 @@ void solve()
         cin >> l >> r;
         cout << query(l, r - 1, 1, 0, n - 1) << endl;
     }
-}
-
-int32_t main()
-{
-    // casas decimais
-    // cout << fixed << setprecision(1);
-
-    // horario
-    // cout << setfill('0') << setw(2);
-
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-
-    int t = 1;
-
-    for (int i = 1; i <= t; i++)
-    {
-        solve();
-
-        // #ifdef ONPC
-        //         cout << "__________________________" << endl;
-        // #endif
-    }
-
-    return 0;
 }
