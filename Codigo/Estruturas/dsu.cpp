@@ -7,11 +7,11 @@ const int INF = 0x3f3f3f3f;
 // Une dois conjuntos e acha a qual conjunto um elemento pertence por seu id
 // find e unite: O(a(n)) ~= O(1) amortizado
 
-struct dsu
+struct DSU
 {
     vector<int> id, sz;
 
-    dsu(int n) : id(n), sz(n, 1) { iota(id.begin(), id.end(), 0); }
+    DSU(int n) : id(n), sz(n, 1) { iota(id.begin(), id.end(), 0); }
 
     int find(int a) { return a == id[a] ? a : id[a] = find(id[a]); }
 
@@ -31,11 +31,11 @@ struct dsu
 //
 // find e unite: O(log(n))
 
-struct dsu
+struct DSU_Bipartite
 {
     vector<int> id, sz, bip, c;
 
-    dsu(int n) : id(n), sz(n, 1), bip(n, 1), c(n) { iota(id.begin(), id.end(), 0); }
+    DSU_Bipartite(int n) : id(n), sz(n, 1), bip(n, 1), c(n) { iota(id.begin(), id.end(), 0); }
 
     int find(int a) { return a == id[a] ? a : find(id[a]); }
     int color(int a) { return a == id[a] ? c[a] : c[a] ^ color(id[a]); }
