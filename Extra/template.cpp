@@ -17,8 +17,6 @@ void err(istream_iterator<string> it, T a, Args... args) {
 	err(++it, args...);
 }
 
-#define rep(i, begin, end) for (__typeof(end) i = (begin) - ((begin) > (end)); i != (end) - ((begin) > (end)); i += 1 - 2 * ((begin) > (end)))
-
 #define dbg(x) cout << #x << " = " << x << endl
 #define printv(a) {for(auto u:a) cout<<u<<" "; cout<<endl;}
 #define all(x) x.begin(), x.end()
@@ -28,7 +26,11 @@ void err(istream_iterator<string> it, T a, Args... args) {
 #define s second
 #define pb push_back
 #define eb emplace_back
+
+// Índice base 0 do primeiro elemento maior ou igual a x em log n
 #define lb(vect, x) (lower_bound(all(vect), x) - vect.begin())
+
+// Índice base 0 do primeiro elemento  estritamente maior que x em log n
 #define ub(vect, x) (upper_bound(all(vect), x) - vect.begin())
 
 typedef unsigned long long ull;

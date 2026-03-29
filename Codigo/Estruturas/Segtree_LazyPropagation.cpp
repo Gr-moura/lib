@@ -1,14 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// SegTree de soma
+// SegTree de Assigment
 // Query e Update em O(log(n))
 // Build em O(n)
 
 const int MAX = 1e5 + 10;
 int n;
 int a[MAX];
-int seg[4 * MAX];
+int seg[4 * MAX], toUpdate[4 * MAX];
+
+void propagate(int p) 
+{
+    if (toUpdate[p]) 
+	{
+        seg[p * 2] = seg[p * 2 + 1] = seg[p];
+ 
+		toUpdate[p * 2] = toUpdate[p * 2 + 1] = true;
+        toUpdate[p] = false;
+    }
+}
 
 // p: posição do nó atual na segtree
 // tl, tr: intervalo, no vetor original, representado por este nó da árvore
@@ -41,13 +52,23 @@ int query(int l, int r, int p = 1, int tl = 0, int tr = n - 1)
 
 // Update na posição ind do vetor original para o valor v
 // update(ind, v); -> Começamos na raiz, que representa o intervalo [0, n - 1]
-int update(int ind, int v, int p = 1, int tl = 0, int tr = n - 1)
+void update(int l, int r, int v, int p = 1, int tl = 0, int tr = n - 1)
 {
-    if (tl == tr and tl == ind) return seg[p] = v;
-    if (ind < tl or ind > tr) return seg[p];
+	propagate(p);
+
+    // Caso base: intervalo totalmente fora da query
+    if (r < tl or l > tr) return;
+
+    // Caso base: intervalo totalmente dentro da query
+    if (tl >= l and tr <= r) 
+	{	
+		seg[p] = v;
+		return;
+	}
 
     int tm = tl + (tr - tl) / 2;
-    return seg[p] = update(ind, v, 2 * p, tl, tm) + update(ind, v, 2 * p + 1, tm + 1, tr);
+    update(l, r, v, 2 * p, tl, tm);
+	update(l, r, v, 2 * p + 1, tm + 1, tr);
 }
 
 void solve()

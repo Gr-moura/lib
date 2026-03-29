@@ -67,7 +67,7 @@ bool isAncestor(int a, int b)
 int lca(int a, int b)
 {
     if (isAncestor(a, b)) return a;
-    if (isAncestor(a, b)) return b;
+    if (isAncestor(b, a)) return b;
 
     for (int k = MAX2 - 1; k >= 0; k--)
     {
