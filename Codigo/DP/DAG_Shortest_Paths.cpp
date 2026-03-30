@@ -6,6 +6,9 @@
 // Original Problem: All subproblems
 // Time: O(|V| + |E|)
 
+// This can very easily be adapted to compute the longest path in a DAG,
+// just by changing the minDist to maxDist and LINF to -LINF.
+
 #include <bits/stdc++.h>
 using namespace std;
 
