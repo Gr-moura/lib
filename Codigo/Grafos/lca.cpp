@@ -1,36 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define printv(a)                                                                                                      \
-    {                                                                                                                  \
-        for (auto u : a)                                                                                               \
-            cout << u << " ";                                                                                          \
-        cout << endl;                                                                                                  \
-    }
-#define all(x) x.begin(), x.end()
-#define int long long
-#define endl '\n'
-#define f first
-#define s second
-#define pb push_back
-#define eb emplace_back
-#define lb(vect, x) (lower_bound(all(vect), x) - vect.begin())
-#define ub(vect, x) (upper_bound(all(vect), x) - vect.begin())
+int MAX_VERTICES = 2e5 + 10;
+int LOG_MAX_VERTICES = 30; 
+int numVertices, tempo;
+vector<vector<int>> adj(MAX_VERTICES), anc(LOG_MAX_VERTICES, vector<int>(MAX_VERTICES, 0));
+vector<int> in(MAX_VERTICES), out(MAX_VERTICES), sz(MAX_VERTICES), depth(MAX_VERTICES, -1);
 
-typedef unsigned long long ull;
-typedef long long ll;
-typedef pair<int, int> pii;
-typedef vector<int> vi;
-
-int MAX = 2e5 + 10;
-int MAX2 = 30;
-int numVertices, q, tempo;
-vector<vi> adj(MAX), anc(MAX2, vi(MAX, 0));
-vi in(MAX), out(MAX);
-
-void dfs(int vAtual, int vPai)
+void dfs(int vAtual, int vPai) // O(N)
 {
     in[vAtual] = tempo++;
+
+	if (vPai != -1) depth[vAtual] = 1 + depth[vPai];
 
     for (int u : adj[vAtual])
     {
@@ -42,34 +23,41 @@ void dfs(int vAtual, int vPai)
     }
 
     out[vAtual] = tempo++;
+	sz[vAtual] = (out[vAtual] - in[vAtual] + 1) / 2;
 }
 
-void buildBL()
+void buildBL() // O(NlogN)
 {
     tempo = 0;
+	depth[0] = 0;
     dfs(0, -1);
 
-    for (int k = 1; k < MAX2; k++)
+    for (int k = 1; k < LOG_MAX_VERTICES; k++)
     {
         for (int i = 0; i < numVertices; i++)
         {
+			// O oitavo ancestral de i é o quarto ancestral do quarto ancestral de i
             anc[k][i] = anc[k - 1][anc[k - 1][i]];
         }
     }
 }
 
-bool isAncestor(int a, int b)
+bool isAncestor(int a, int b) // O(1)
 {
-    if (in[a] <= in[b] and out[a] >= out[b]) return true;
+	// Um vértice a é ancestral de b se o tempo de entrada de a for menor ou igual ao 
+	// tempo de entrada de b e o tempo de saída de a for maior ou igual ao tempo de saída de b
+    
+	if (in[a] <= in[b] and out[a] >= out[b]) return true;
     return false;
 }
 
-int lca(int a, int b)
+int LCA(int a, int b) // O(NlogN)
 {
     if (isAncestor(a, b)) return a;
     if (isAncestor(b, a)) return b;
 
-    for (int k = MAX2 - 1; k >= 0; k--)
+	// Pegamos o maior ancestral de a que não é ancestral de b
+    for (int k = LOG_MAX_VERTICES - 1; k >= 0; k--)
     {
         if (isAncestor(anc[k][a], b)) continue;
         a = anc[k][a];
@@ -78,58 +66,18 @@ int lca(int a, int b)
     return anc[0][a];
 }
 
-void solve()
+int dist(int a, int b) // O (NlogN)
 {
-    cin >> numVertices >> q;
-
-    for (int i = 1; i < numVertices; i++)
-    {
-        int pai;
-        cin >> pai;
-        pai--;
-
-        adj[i].pb(pai);
-        adj[pai].pb(i);
-    }
-
-    buildBL();
-
-    for (int i = 0; i < q; i++)
-    {
-        int a, b;
-        cin >> a >> b;
-        a--, b--;
-
-        cout << lca(a, b) + 1 << endl;
-    }
+	return depth[a] + depth[b] - 2 * depth[LCA(a, b)];
 }
 
-int32_t main()
+int kthAncestor(int k, int a) // O(NlogN)
 {
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+	// Se o bit i de k for 1, subimos para o 2^i-ésimo ancestral de a
+	for (int i = LOG_MAX_VERTICES - 1; i >= 0; i--)
+	{
+		if (k & (1ULL << i)) a = anc[i][a];
+	}
 
-    // casas decimais
-    // cout << fixed << setprecision(1);
-
-    // horario
-    // cout << setfill('0') << setw(2);
-
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-
-    int t = 1;
-    // cin >> t;
-
-    for (int i = 1; i <= t; i++)
-    {
-        solve();
-
-        // #ifdef ONPC
-        //         cout << "__________________________" << endl;
-        // #endif
-    }
-
-    return 0;
+	return a;
 }

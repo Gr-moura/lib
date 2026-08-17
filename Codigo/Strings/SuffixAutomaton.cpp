@@ -84,6 +84,7 @@ struct SuffixAutomaton // O(n log k) para criar
     int qtDiffStrings();       // O(n)
     int szAllSubstrings();     // O(n)
     int qtStringsSaindo(int estadoAtual = 0);
+	string kesimaString(int k, int posAtual = 0, string ans = "", int estadoAtual = 0);
 };
 
 bool SuffixAutomaton::isPresent(string &s) // O(|S| log k)
@@ -98,7 +99,7 @@ bool SuffixAutomaton::isPresent(string &s) // O(|S| log k)
     return true;
 }
 
-int qtDiffStrings() // O(n)
+int SuffixAutomaton::qtDiffStrings() // O(n)
 {
     // Uma substring aparece apenas em um estado,
     // basta somar a qt substrings em cada estado
@@ -110,7 +111,7 @@ int qtDiffStrings() // O(n)
     return tot;
 }
 
-int szAllSubstrings() // O(n)
+int SuffixAutomaton::szAllSubstrings() // O(n)
 {
     int tot = 0;
     for (int i = 1; i < sz; i++)
@@ -127,7 +128,7 @@ int szAllSubstrings() // O(n)
 }
 
 int qt[MAX * 2];
-int qtStringsSaindo(int estadoAtual = 0)
+int SuffixAutomaton::qtStringsSaindo(int estadoAtual = 0)
 {
     int ans = 1;
     for (auto [c, w] : st[estadoAtual].next)
@@ -136,7 +137,7 @@ int qtStringsSaindo(int estadoAtual = 0)
     return qt[estadoAtual] = ans;
 }
 
-string kesimaString(int k, int posAtual = 0, string ans = "", int estadoAtual = 0)
+string SuffixAutomaton::kesimaString(int k, int posAtual = 0, string ans = "", int estadoAtual = 0)
 {
     for (auto [c, proximoEstado] : st[estadoAtual].next)
     {
@@ -154,5 +155,3 @@ string kesimaString(int k, int posAtual = 0, string ans = "", int estadoAtual = 
 
     return ans;
 }
-}
-;
