@@ -37,6 +37,7 @@ typedef unsigned long long ull;
 typedef long long ll;
 typedef pair<int, int> pii;
 typedef vector<int> vi;
+typedef vector<vi> vvi;
 
 void NO() { cout << "NO" << endl; }
 void YES() { cout << "YES" << endl; }
