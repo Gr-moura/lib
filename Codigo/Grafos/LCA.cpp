@@ -33,7 +33,7 @@ void dfs(int vAtual, int vPai) // O(n)
     {
         if (u != vPai)
         {
-            // O ancestral 2^0 = 1 de u é o próprio vAtual
+			// vAtual é o ancestral imediato de u: um salto de 2^0 = 1 aresta
             anc[0][u] = vAtual;
             dfs(u, vAtual);
         }
@@ -42,8 +42,8 @@ void dfs(int vAtual, int vPai) // O(n)
     out[vAtual] = tempo++;
 
     // Cada vértice da subárvore contribui com um tempo de entrada e um de saída, por isso, dividimos por dois
-	// Se tem apenas um filho, o tempo de entrada é 0 e saída é 3, logo pegamos o teto da divisão
-	sz[vAtual] = (out[vAtual] - in[vAtual] + 1) / 2;
+	// Adicionamos +1 para poder incluir o nó atual no tamanho da árvore
+	sz[vAtual] = (out[vAtual] + 1 - in[vAtual]) / 2;
 }
 
 void buildBL() // O(n log(n))
@@ -79,12 +79,17 @@ int LCA(int a, int b) // O(log(n))
     if (isAncestor(a, b)) return a;
     if (isAncestor(b, a)) return b;
 
-    // Sobe a até o ancestral mais alto que ainda não é ancestral de b
-    for (int k = LOG_MAX_VERTICES - 1; k >= 0; k--)
-    {
-        if (isAncestor(anc[k][a], b)) continue;
-        a = anc[k][a];
-    }
+    // Fazemos uma busca binária no caminho de a até a raiz.
+	// Procuramos o ancestral mais alto de a que ainda não é ancestral de b;
+	// esse vértice estará imediatamente abaixo do LCA
+	for (int k = LOG_MAX_VERTICES - 1; k >= 0; k--)
+	{
+		// Se o salto chegar ao LCA ou passar acima dele, não o realizamos
+		if (isAncestor(anc[k][a], b)) continue;
+
+		// O salto continua abaixo do LCA, dividimos o espaço de busca entre o atual e o ancestral da iteração anterior
+		a = anc[k][a];
+	}
 
     // O pai de a é o primeiro ancestral que também contém b em sua subárvore
     return anc[0][a];
