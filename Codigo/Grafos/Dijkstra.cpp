@@ -24,26 +24,31 @@ void djikstra(int vInicial)
 {
     // Min-heap de pares {custoAtual, vértice}
     priority_queue<pii, vector<pii>, greater<pii>> pq;
-    pq.push({0, vInicial});
 
-    while (!pq.empty())
-    {
-        // Extrai o vértice de menor custo
-        auto [custoAtual, vAtual] = pq.top();
-        pq.pop();
+	minDist[vInicial] = 0;
+	pq.push({0, vInicial});
+
+	while (!pq.empty())
+	{
+		// Extrai o vértice de menor custo
+		auto [custoAtual, vAtual] = pq.top();
+		pq.pop();
 
 		// Se estamos em uma solução pior, ignoramos
-        if (custoAtual >= minDist[vAtual]) continue;
-        minDist[vAtual] = custoAtual;
+		if (custoAtual > minDist[vAtual])
+			continue;
 
-        // Gera novas distâncias a partir dos vizinhos de vAtual
-        for (auto [u, custoAresta] : g[vAtual])
-        {
-            int novoCusto = custoAtual + custoAresta;
-            if (novoCusto < minDist[u])
-                pq.push({novoCusto, u});
-        }
-    }
+		// Gera novas distâncias a partir dos vizinhos de vAtual
+		for (auto [u, custoAresta] : g[vAtual])
+		{
+			int novoCusto = custoAtual + custoAresta;
+			if (novoCusto < minDist[u])
+			{
+				minDist[u] = novoCusto;
+				pq.push({novoCusto, u});
+			}
+		}
+	}
 }
 
 // Dijkstra Quadrático
