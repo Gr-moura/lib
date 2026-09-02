@@ -81,7 +81,7 @@ vector<int> djikstraQuadratico(int vInicial, int nVertices)
 	{
 		// Acha o vértice de menor distância, ainda não visitado.
 		// Sabemos que a distância dele será miníma, pois usando qualquer outro vértice para chegar
-		// nele resultaria em uma distância maior ainda
+		// nele resultaria em uma distância maior ainda (já que as arestas são sempre positivas)
 		int minDistAtual = LINF, minV = -1;
 		for (int v = 0; v < nVertices; v++)
 		{
@@ -92,10 +92,10 @@ vector<int> djikstraQuadratico(int vInicial, int nVertices)
 			}
 		}
 
-		vis[minV] = true;
-
 		// Se não existir, já sabemos a menor distância para todos os alcançáveis
 		if (minV == -1) break;
+
+		vis[minV] = true;
 
 		for (int u = 0; u < nVertices; u++)
 		{
