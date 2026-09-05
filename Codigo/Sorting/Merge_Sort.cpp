@@ -37,17 +37,17 @@ vector<int> merge(const vector<int> &esq, const vector<int> &dir)
 	return ord;
 }
 
-vector<int> mergeSort(const vector<int> &valores)
+vector<int> mergeSort(const vector<int> &nums)
 {
-	int n = valores.size();
+	int n = nums.size();
 
 	// Vetores com zero ou um elemento já estão ordenados
-	if (n <= 1) return valores;
+	if (n <= 1) return nums;
 
 	// Divide o vetor em duas metades
 	int mid = n / 2;
-	vector<int> esq(valores.begin(), valores.begin() + mid);
-	vector<int> dir(valores.begin() + mid, valores.end());
+	vector<int> esq(nums.begin(), nums.begin() + mid);
+	vector<int> dir(nums.begin() + mid, nums.end());
 
 	// Ordena cada metade separadamente
 	esq = mergeSort(esq);
