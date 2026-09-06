@@ -50,6 +50,39 @@ int query(int pos, int ini, int fim, int p, int q)
     return query(esq, ini, mid, p, q) + query(dir, mid + 1, fim, p, q);
 }
 
+// Retorna o menor índice i cuja soma de prefixo v[0] + ... + v[i] é >= target
+// Os valores do vetor devem ser não negativos, inclusive após updates
+// Retorna -1 se a soma total for menor que target
+// firstPrefixAtLeast(target); -> Começamos na raiz, que representa o intervalo [0, n - 1]
+int firstPrefixAtLeast(int pos, int ini, int fim, int target)
+{
+	// O target não está no nó atual
+	if (target > seg[pos]) return -1;
+
+	// Ele está no nó atual e esse nó é uma folha
+	if (ini == fim) return ini;
+
+	int mid = ini + (fim - ini) / 2;
+	int esq = 2 * pos, dir = 2 * pos + 1;
+
+	// Se a soma da esquerda é suficiente, a resposta está nela
+	if (seg[esq] >= target) return firstPrefixAtLeast(esq, ini, mid, target);
+
+	// Caso contrário, desconta a soma da esquerda e procura à direita
+	return firstPrefixAtLeast(dir, mid + 1, fim, target - seg[esq]);
+}
+
+// Retorna o índice do k-ésimo 1 em um vetor binário, com k indexado em 1
+// Pré-condições: o vetor é binário e k >= 1
+// Retorna -1 se o vetor tiver menos de k elementos iguais a 1
+// findKth(k); -> Começamos na raiz, que representa o intervalo [0, n - 1]
+int findKth(int pos, int ini, int fim, int k)
+{
+	// Em um vetor binário, a soma de prefixo conta quantos elementos 1 apareceram
+	// Logo, o k-ésimo 1 está no primeiro prefixo cuja soma é >= k
+	return firstPrefixAtLeast(pos, ini, fim, k);
+}
+
 // Update na posição id do vetor original para o valor val
 // update(id, val); -> Começamos na raiz, que representa o intervalo [0, n - 1]
 void update(int pos, int ini, int fim, int id, int val)
