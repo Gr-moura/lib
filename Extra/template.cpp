@@ -1,9 +1,6 @@
 /*
+$name$ => $date$
 $url$
-
-ID: gabriel139
-LANG: C++
-TASK: test
 */
 
 /* clang-format off */
@@ -62,7 +59,9 @@ const int INF = 0x3f3f3f3f;
 const ll LINF = 0x3f3f3f3f3f3f3f3fll;
 /* clang-format on */
 
-void solve() {}
+void solve() {
+	$CURSOR_PLACEHOLDER
+}
 
 int32_t main()
 {
