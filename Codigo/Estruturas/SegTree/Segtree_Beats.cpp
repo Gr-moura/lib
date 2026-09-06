@@ -5,10 +5,9 @@ using namespace std;
 // SegTree Beats
 //
 // Suporta as operações:
-// query(a, b) - sum(v[a..b])
-// updateMod(a, b, x) faz com que v[i] <- v[i] % x,
-// para i em [a, b]
-// updateSet(i, x) faz com que v[i] <- x
+// query(a, b) => sum(v[a..b])
+// updateMod(a, b, x) => faz com que v[i] <- v[i] % x, para i em [a, b]
+// updateSet(i, x) => faz com que v[i] <- x
 //
 // Complexidade: O( (n + q) * log n * log C ),
 // onde n é o tam de v, q é o número de queries (qualquer uma das três suportadas), e C é o maior valor possível em v
