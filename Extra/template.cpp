@@ -8,7 +8,18 @@ TASK: test
 
 /* clang-format off */
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
+using namespace __gnu_pbds;
+
+template <class Key, class Cmp = less<Key>>
+using ordered_set = tree<Key, null_type, Cmp, rb_tree_tag,
+                         tree_order_statistics_node_update>;
+
+template <class Key, class Value, class Cmp = less<Key>>
+using ordered_map = tree<Key, Value, Cmp, rb_tree_tag,
+                         tree_order_statistics_node_update>;
 
 #define error(args...) { string _s = #args; replace(_s.begin(), _s.end(), ',', ' '); stringstream _ss(_s); istream_iterator<string> _it(_ss); err(_it, args); }
 
